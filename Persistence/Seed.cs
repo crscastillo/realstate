@@ -12,39 +12,56 @@ namespace Persistence
         public static async Task SeedData(DataContext context,
             UserManager<AppUser> userManager)
         {
-            if (!userManager.Users.Any())
+            // General
+            await SeedUsers(userManager);
+
+            // Reactivities
+            await SeedActivities(context);
+
+            //RealState
+            await SeedPropertyTypes(context);
+            
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task SeedPropertyTypes(DataContext context)
+        {
+            if (!context.PropertyTypes.Any())
             {
-                var users = new List<AppUser>
+                var propertyTypes = new List<PropertyType>()
                 {
-                    new AppUser
-                    {
-                        Id = "a",
-                        DisplayName = "Bob",
-                        UserName = "bob",
-                        Email = "bob@test.com"
+                    new PropertyType {
+                        Id = 1,
+                        Name = "Apartamento"
                     },
-                    new AppUser
-                    {
-                        Id = "b",
-                        DisplayName = "Jane",
-                        UserName = "jane",
-                        Email = "jane@test.com"
+                    new PropertyType {
+                        Id = 2,
+                        Name = "Bodega"
                     },
-                    new AppUser
-                    {
-                        Id = "c",
-                        DisplayName = "Tom",
-                        UserName = "tom",
-                        Email = "tom@test.com"
+                    new PropertyType {
+                        Id = 3,
+                        Name = "Casa"
                     },
+                    new PropertyType {
+                        Id = 4,
+                        Name = "Condominio"
+                    },
+                    new PropertyType {
+                        Id = 5,
+                        Name = "Finca"
+                    },
+                    new PropertyType {
+                        Id = 6,
+                        Name = "Quinta"
+                    }
                 };
 
-                foreach (var user in users)
-                {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
-                }
+                await context.PropertyTypes.AddRangeAsync(propertyTypes);
             }
+        }
 
+        private static async Task SeedActivities(DataContext context)
+        {
             if (!context.Activities.Any())
             {
                 var activities = new List<Activity>
@@ -280,7 +297,42 @@ namespace Persistence
                 };
 
                 await context.Activities.AddRangeAsync(activities);
-                await context.SaveChangesAsync();
+            }
+        }
+
+        private static async Task SeedUsers(UserManager<AppUser> userManager)
+        {
+            if (!userManager.Users.Any())
+            {
+                var users = new List<AppUser>
+                {
+                    new AppUser
+                    {
+                        Id = "a",
+                        DisplayName = "Bob",
+                        UserName = "bob",
+                        Email = "bob@test.com"
+                    },
+                    new AppUser
+                    {
+                        Id = "b",
+                        DisplayName = "Jane",
+                        UserName = "jane",
+                        Email = "jane@test.com"
+                    },
+                    new AppUser
+                    {
+                        Id = "c",
+                        DisplayName = "Tom",
+                        UserName = "tom",
+                        Email = "tom@test.com"
+                    },
+                };
+
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
             }
         }
     }
