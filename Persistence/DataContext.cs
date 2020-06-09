@@ -32,16 +32,7 @@ namespace Persistence
             builder.Entity<UserActivity>()
             .HasOne(u => u.Activity)
             .WithMany(u => u.UserActivities)
-            .HasForeignKey(a => a.ActivityId);
-
-            // Is this below needed ?????? or only for many to many tables like the one for useractivity
-            builder.Entity<Property>()
-                .HasOne(p=>p.PropertyType);
-
-            builder.Entity<Property>()
-                .HasMany(p=>p.PropertyImages)
-                .WithOne(i => i.Property)
-                .HasForeignKey(p => p.PropertyId);                            
+            .HasForeignKey(a => a.ActivityId);            
         }
     }
 }
